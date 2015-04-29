@@ -1,5 +1,6 @@
 package lifecounter.radek.washington.edu.quizdroidparti;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -26,7 +27,7 @@ public class Quiz extends ActionBarActivity {
         qna = this.getIntent().getExtras();
         String[] questions = qna.getStringArray("Q");
         String[] choices = qna.getStringArray("Q1");
-        int[] answers = qna.getIntArray("A");
+        final int[] answers = qna.getIntArray("A");
         current = qna.getInt("current");
 
         final Button submit = (Button) findViewById(R.id.submit);
@@ -46,9 +47,19 @@ public class Quiz extends ActionBarActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton checked = (RadioButton) findViewById(checkedId);
                 int selected = Integer.parseInt((String)checked.getTag());
-                qna.putString("a1", "" + selected);
+                qna.putInt("selected", selected);
+                qna.putInt("correctAnswer", answers[current]);
                 qna.putInt("current", current++);
                 submit.setVisibility(View.VISIBLE);
+            }
+        });
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(Quiz.this, Answer.class);
+                next.putExtras(qna);
+                startActivity(next);
             }
         });
     }

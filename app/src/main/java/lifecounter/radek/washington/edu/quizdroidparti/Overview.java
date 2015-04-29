@@ -91,7 +91,7 @@ public class Overview extends ActionBarActivity {
                 qna.putIntArray("A", answers);
 
                 qna.putInt("numQ", NUM_QUESTIONS);
-                qna.putInt("CORRECT", 0);
+                qna.putInt("correct", 0);
                 qna.putInt("current", 0);
                 qna.putInt("numC", NUM_CHOICES);
                 qna.putString("topic", topicSelected);
