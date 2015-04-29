@@ -4,15 +4,51 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
 public class Quiz extends ActionBarActivity {
+
+    private Bundle qna;
+    private int current;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
+        qna = this.getIntent().getExtras();
+        String[] questions = qna.getStringArray("Q");
+        String[] choices = qna.getStringArray("Q1");
+        int[] answers = qna.getIntArray("A");
+        current = qna.getInt("current");
+
+        final Button submit = (Button) findViewById(R.id.submit);
+        TextView question = (TextView) findViewById(R.id.question);
+        question.setText(questions[current]);
+
+        RadioGroup options = (RadioGroup)findViewById(R.id.choices);
+
+        for (int i = 0; i < qna.getInt("numC"); i++) {
+            String choice = choices[i];
+            ((RadioButton) options.getChildAt(i)).setText(choice);
+        }
+        
+        options.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton checked = (RadioButton) findViewById(checkedId);
+                int selected = Integer.parseInt((String)checked.getTag());
+                qna.putString("a1", "" + selected);
+                qna.putInt("current", current++);
+            }
+        });
     }
 
 

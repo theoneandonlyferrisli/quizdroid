@@ -13,8 +13,10 @@
 
     <string name="title_activity_overview">Overview</string>
     <string name="begin_button_text">BEGIN</string>
-    <string name="title_activity_quiz">Quiz</string>
 
-    <string name="hello_world">Hello world!</string>
+
+    <string name="title_activity_quiz">Quiz</string>
+    <string name="submit_button_text">SUBMIT</string>
+
 
 </resources>
