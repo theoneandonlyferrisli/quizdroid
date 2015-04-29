@@ -30,6 +30,7 @@ public class Quiz extends ActionBarActivity {
         current = qna.getInt("current");
 
         final Button submit = (Button) findViewById(R.id.submit);
+        submit.setVisibility(View.INVISIBLE);
         TextView question = (TextView) findViewById(R.id.question);
         question.setText(questions[current]);
 
@@ -39,7 +40,7 @@ public class Quiz extends ActionBarActivity {
             String choice = choices[i];
             ((RadioButton) options.getChildAt(i)).setText(choice);
         }
-        
+
         options.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -47,6 +48,7 @@ public class Quiz extends ActionBarActivity {
                 int selected = Integer.parseInt((String)checked.getTag());
                 qna.putString("a1", "" + selected);
                 qna.putInt("current", current++);
+                submit.setVisibility(View.VISIBLE);
             }
         });
     }
