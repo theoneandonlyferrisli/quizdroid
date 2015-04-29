@@ -26,9 +26,16 @@ public class Quiz extends ActionBarActivity {
 
         qna = this.getIntent().getExtras();
         String[] questions = qna.getStringArray("Q");
-        String[] choices = qna.getStringArray("Q1");
         final int[] answers = qna.getIntArray("A");
         current = qna.getInt("current");
+        String[] choices = null;
+        if (current == 0)
+             choices = qna.getStringArray("Q1");
+        else
+            choices = qna.getStringArray("Q2");
+
+
+
 
         final Button submit = (Button) findViewById(R.id.submit);
         submit.setVisibility(View.INVISIBLE);
@@ -49,7 +56,7 @@ public class Quiz extends ActionBarActivity {
                 int selected = Integer.parseInt((String)checked.getTag());
                 qna.putInt("selected", selected);
                 qna.putInt("correctAnswer", answers[current]);
-                qna.putInt("current", current++);
+                qna.putInt("current", current);
                 submit.setVisibility(View.VISIBLE);
             }
         });

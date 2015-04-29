@@ -39,7 +39,9 @@ public class Answer extends ActionBarActivity {
         TextView result2 = (TextView) findViewById(R.id.num_correct);
         result2.setText("You have " + numCorrect + " out of " + total + " correct!");
 
-        final Button next = (Button) findViewById(R.id.next);
+        Button next = (Button) findViewById(R.id.next);
+        if (current == 1)
+            next.setText("FINISH");
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,7 +50,6 @@ public class Answer extends ActionBarActivity {
                     next.putExtras(qna);
                     startActivity(next);
                 } else {
-                    next.setText("FINISH");
                     Intent finish = new Intent(Answer.this, TopicList.class);
                     startActivity(finish);
                 }
