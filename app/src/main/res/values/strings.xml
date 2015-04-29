@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">QuizDroid (Part I)</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="quiz_type_math">Math</string>
+    <string name="quiz_type_physics">Physics</string>
+    <string name="quiz_type_marvel">Marvel Super Heroes</string>
+
+    <string name="welcome_message">Welcome to Quiz Droid! Take a quiz and have a cookie!</string>
+    <string name="title_activity_topic_overview">topic_overview</string>
+
+
+    <string name="title_activity_overview">Overview</string>
+
 </resources>
