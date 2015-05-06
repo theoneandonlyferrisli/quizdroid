@@ -34,7 +34,7 @@ public class TopicList extends ActionBarActivity {
         topicList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent next = new Intent(TopicList.this, Overview.class);
+                Intent next = new Intent(TopicList.this, ViewFramework.class);
                 next.putExtra("selectedTopic", topics[position]);
                 startActivity(next);
             }
