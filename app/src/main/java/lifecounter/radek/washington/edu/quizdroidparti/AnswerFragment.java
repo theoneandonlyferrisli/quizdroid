@@ -39,9 +39,10 @@ public class AnswerFragment extends Fragment {
         Question currentQuestion = currentTopic.getQuestions().get(currentTopic.getCurrentIndex());
         currentTopic.choose(currentTopic.getLastSelected());
 
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_answer, container, false);
+
+        // Set corresponding layout values after the user has made a choice.
         TextView result1 = (TextView) view.findViewById(R.id.correct_answer);
         result1.setText("The correct choice is the no." + currentQuestion.getAnswer() +
                 ", and you answered no." + currentTopic.getLastSelected());
@@ -50,11 +51,11 @@ public class AnswerFragment extends Fragment {
         result2.setText("You have " + currentTopic.getNumCorrect() + " out of "
                 + currentTopic.getQuestions().size() + " correct!");
 
+        final QuestionFragment questionFragment = new QuestionFragment();
+
         Button next = (Button) view.findViewById(R.id.next);
         if (currentTopic.isFinished())
             next.setText("FINISH");
-
-        final QuestionFragment questionFragment = new QuestionFragment();
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +65,7 @@ public class AnswerFragment extends Fragment {
                         .replace(R.id.container, questionFragment)
                         .commit();
                 } else {
+                    currentTopic.reset();
                     Intent finish = new Intent(getActivity(), TopicList.class);
                     startActivity(finish);
                 }

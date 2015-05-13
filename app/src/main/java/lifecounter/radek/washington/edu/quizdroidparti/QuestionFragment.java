@@ -34,7 +34,7 @@ public class QuestionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Get the application object and current topic.
         QuizApp app = (QuizApp) getActivity().getApplication();
-        Topic current = app.getCurrentTopic();
+        final Topic current = app.getCurrentTopic();
         List<Question> questions = current.getQuestions();
         Question currentQuestion = questions.get(current.getCurrentIndex());
         List<String> currentOptions = currentQuestion.getOptions();
@@ -60,6 +60,7 @@ public class QuestionFragment extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton checked = (RadioButton) view.findViewById(checkedId);
                 int selected = Integer.parseInt((String) checked.getTag());
+                current.setLastSelected(selected);
                 submit.setVisibility(View.VISIBLE);
             }
         });

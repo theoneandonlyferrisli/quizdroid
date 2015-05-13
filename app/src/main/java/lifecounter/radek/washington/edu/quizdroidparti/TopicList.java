@@ -51,7 +51,6 @@ public class TopicList extends ActionBarActivity {
                 Intent next = new Intent(TopicList.this, ViewFramework.class);
                 next.putExtra("selectedTopic", topicArray[position]);
                 app.setCurrentTopic(topics.get(position));
-                app.getCurrentTopic().setLastSelected(position);
                 startActivity(next);
             }
         });

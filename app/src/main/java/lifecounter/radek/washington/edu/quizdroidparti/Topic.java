@@ -57,7 +57,15 @@ public class Topic implements Serializable {
      * Returns true if quiz on the current topic is finished and false otherwise.
      */
     public boolean isFinished() {
-        return currentIndex == questions.size() - 1;
+        return currentIndex == questions.size();
+    }
+
+    /**
+     * Resets all values to pre-start state.
+     */
+    public void reset() {
+        currentIndex = 0;
+        numCorrect = 0;
     }
 
     /**
