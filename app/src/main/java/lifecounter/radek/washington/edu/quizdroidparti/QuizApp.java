@@ -9,6 +9,11 @@ import java.util.List;
  */
 public class QuizApp extends Application {
     private static final String TAG = "QuizApp";
+    private Topic current;
+    private List<Topic> topics;
+
+    // A repository of locally stored questions and topics.
+    private LocalTopicRepo localRepo;
 
     //Make sure QuizApp is implemented as a singleton.
     private static QuizApp instance = null;
@@ -19,6 +24,8 @@ public class QuizApp extends Application {
         } else {
             throw new RuntimeException("No more than one instance of QuizApp is allowed");
         }
+        localRepo = new LocalTopicRepo();
+        topics = localRepo.getTopicList();
     }
 
     @Override
@@ -26,5 +33,48 @@ public class QuizApp extends Application {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "QuizApp is successfully created!");
+    }
+
+    /**
+     * A method that returns a list of locally stored topics.
+     *
+     * @return a list of locally stored topics
+     */
+    public List<Topic> getLocalTopicList() {
+        return topics;
+    }
+
+    /**
+     * Returns the topic the user chose.
+     */
+    public Topic getCurrentTopic() {
+        if (current == null)
+            throw new IllegalStateException("You have not yet set the current topic!");
+        return current;
+    }
+
+    /**
+     * Sets the current topic to be the topic that the user picked.
+     */
+    public void setCurrentTopic(Topic current) {
+        this.current = current;
+    }
+    /**
+     *
+     * @return the number of topics
+     */
+    public int getNumTopics() {
+        return topics.size();
+    }
+
+    /**
+     *
+     * @return a String array of topic titles
+     */
+    public String[] getTopicArray() {
+        String[] topicArray = new String[getNumTopics()];
+        for (int i = 0; i < getNumTopics(); i++)
+            topicArray[i] = topics.get(i).getTitle();
+        return topicArray;
     }
 }

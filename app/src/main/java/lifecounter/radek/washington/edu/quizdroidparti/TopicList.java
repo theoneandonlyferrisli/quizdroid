@@ -10,10 +10,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.lang.reflect.Array;
+import java.util.*;
+
 
 public class TopicList extends ActionBarActivity {
 
-    private String[] topics = new String[]{"Math", "Physics", "Marvel Superheroes"};
+    private List<Topic> topics;
     private ListView topicList;
 
     @Override
@@ -21,12 +24,23 @@ public class TopicList extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topic_list);
 
+        // Access the application object
+        QuizApp app = (QuizApp)getApplication();
+
         topicList = (ListView) findViewById(R.id.list_of_topics);
+        topics = app.getLocalTopicList();
+
+        // Get the topic title array from local repository.
+        final String[] topicArray = app.getTopicArray();
+
+        // Attach short description to topic titles.
+        for (int i = 0; i < topicArray.length; i++)
+            topicArray[i] = topicArray[i] + " (" + topics.get(i).getShortDesc() + ")";
 
         // Set up the adapter for the ListView containing a list of topics for
         // users to choose from.
         ArrayAdapter<String> topicListAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, topics);
+                android.R.layout.simple_list_item_2, topicArray);
         topicList.setAdapter(topicListAdapter);
 
         // Set up the OnItemClickListener so that the corresponding activity is brought
@@ -35,7 +49,7 @@ public class TopicList extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent next = new Intent(TopicList.this, ViewFramework.class);
-                next.putExtra("selectedTopic", topics[position]);
+                next.putExtra("selectedTopic", topicArray[position]);
                 startActivity(next);
             }
         });

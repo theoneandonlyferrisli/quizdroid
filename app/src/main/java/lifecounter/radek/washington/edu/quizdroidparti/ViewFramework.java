@@ -20,14 +20,15 @@ import java.util.List;
 
 public class ViewFramework extends ActionBarActivity {
 
-    private final int NUM_QUESTIONS = 2;
-    private final int NUM_CHOICES = 4;
+    /*private final int NUM_QUESTIONS = 2;
+    private final int NUM_CHOICES = 4;*/
 
     private String description;
-    private String[] questions;
+    private List<Topic> topics;
+    /*private String[] questions;
     private String[] firstQuestionChoices;
     private String[] secondQuestionChoices;
-    private int[] answers;
+    private int[] answers;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,64 +38,27 @@ public class ViewFramework extends ActionBarActivity {
         Intent incoming = getIntent();
         final String topicSelected = incoming.getStringExtra("selectedTopic");
 
-        //Set topic description and initialize the arrays with questions, choices,
-        // and answers according to user's choice of topic.
-        if (topicSelected.equalsIgnoreCase("Math")) {
-            description = "Something that you have to learn from 6 all the way to " +
-                    "your college graduation, at which point you decide you've learned way too much of it " +
-                    "to be actually useful. You then start looking at your academic life pathetically and " +
-                    "wondering how on earth did you spend all those time on something like this (True story).";
+        // Get the list of topics from QuizApp.
+        QuizApp app = (QuizApp) getApplication();
+        topics = app.getLocalTopicList();
 
-            questions = new String[] {"What's the answer of 13 * 13?", "Is 2 a prime number?"};
-            firstQuestionChoices = new String[] {"199", "169", "99", "Please use a calculator and hit yourself in the head!"};
-            secondQuestionChoices = new String[] {"Yes", "No", "This is a philosophy question", "My math sucks"};
-            answers = new int[] {1, 0};
-        } else if (topicSelected.equalsIgnoreCase("Physics")) {
-            description = "A horrendous nightmare in which you have to live through your " +
-                    "college (if you are an engineering major, ofc). Sometimes you wonder why life is so cruel when " +
-                    "you look at spinning wheel and have darn clue how to make it stop by spinning yourself.";
-            questions = new String[] {"What's the speed of sound?", "Second Newton's Law?"};
-            firstQuestionChoices = new String[] {"3 * 10^8 m/s", "343 m/s", "1200 m/s", "Admit it! You don't know!"};
-            secondQuestionChoices = new String[] {"F = mg", "V = D / t", "F = ma", "E = mc^2"};
-            answers = new int[] {1, 2};
-        } else if (topicSelected.equalsIgnoreCase("Marvel Superheroes")) {
-            description = "For all nerds (or quasi-nerds) alike (which I humbly assume " +
-                    "you are, given you spend a good chunk of your life like me sitting in front of a computer " +
-                    "and writing apps), this is a dream world too distant and beautiful to even think about.";
-            questions = new String[] {"Who is Thor?", "IronMan vs Darth Vader?"};
-            firstQuestionChoices = new String[] {"Stark's dad", "A narcissistic good-looking guy", "A scientist who mutated", "Superman's cousin"};
-            secondQuestionChoices = new String[] {"Darth Vader is not Marvel-made", "Vader rules!", "LOL.", "I quit!"};
-            answers = new int[] {1, 1};
+        //Get the topic title array from QuizApp.
+        String[] topicArray = app.getTopicArray();
+
+        //Set the current topic.
+        for (int i = 0; i < topicArray.length; i++) {
+            if (topicSelected.equalsIgnoreCase(topicArray[i]))
+                app.setCurrentTopic(topics.get(i));
         }
-
-        // Put questions and related data into a bundle.
-        Bundle qna = new Bundle();
-        qna.putStringArray("Q", questions);
-        qna.putStringArray("Q1", firstQuestionChoices);
-        qna.putStringArray("Q2", secondQuestionChoices);
-        qna.putIntArray("A", answers);
-
-        qna.putInt("numQ", NUM_QUESTIONS);
-        qna.putInt("correct", 0);
-        qna.putInt("current", 0);
-        qna.putInt("numC", NUM_CHOICES);
-        qna.putString("topic", topicSelected);
-        qna.putString("description", description);
-
-        Log.i("ViewFramework", "View Framework checked!");
 
         // Set up a new fragment manager.
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
         OverviewFragment overviewFragment = new OverviewFragment();
-        overviewFragment.setArguments(qna);
 
         ft.add(R.id.container, overviewFragment);
         ft.commit();
-
-        Log.i("FragmentManager", "FM checked!");
-
     }
 
 

@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 
 public class OverviewFragment extends Fragment {
     private Bundle qna;
@@ -26,35 +28,30 @@ public class OverviewFragment extends Fragment {
         if (getArguments() != null) {
             qna = getArguments();
         }
-
-        Log.i("Overview Fragment", "OF created!");
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i("Overview Fragment", "onCreateView called!");
 
+        // Get the application object.
+        QuizApp app = (QuizApp) getActivity().getApplication();
+        Topic currentTopic = app.getCurrentTopic();
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
-        final String topicSelected = qna.getString("topic");
-
-        Log.i("Overview Fragment", "Inflater created!");
 
         //Set view controls for question overview.
         TextView topic = (TextView) view.findViewById(R.id.topic);
-        topic.setText(topicSelected);
+        topic.setText(currentTopic.getTitle());
 
         TextView description = (TextView) view.findViewById(R.id.topic_description);
-        description.setText(qna.getString("description"));
+        description.setText(currentTopic.getLongDesc());
 
         TextView numQuestions = (TextView) view.findViewById(R.id.number_of_questions);
-        numQuestions.setText("Number of questions available: " + qna.getInt("numQ"));
+        numQuestions.setText("Number of questions available: " + currentTopic.getQuestions().size());
 
         final QuestionFragment questionFragment = new QuestionFragment();
-        questionFragment.setArguments(qna);
 
         Button begin = (Button) view.findViewById(R.id.BEGIN);
         begin.setOnClickListener(new View.OnClickListener() {

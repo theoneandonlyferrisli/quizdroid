@@ -68,6 +68,7 @@ public class LocalTopicRepo implements TopicRepository {
         physicsOptions1.add("1200 m/s");
         physicsOptions1.add("Admit it! You don't know!");
 
+        marvel = new Topic(marvelTitle, marvelShortDesc, marvelLongDesc);
         List<String> physicsOptions2 = new ArrayList<String>();
         physicsOptions2.add("F = mg");
         physicsOptions2.add("V = D / t");
