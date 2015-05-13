@@ -77,4 +77,8 @@ public class QuizApp extends Application {
             topicArray[i] = topics.get(i).getTitle();
         return topicArray;
     }
+
+    /**
+     *
+     */
 }

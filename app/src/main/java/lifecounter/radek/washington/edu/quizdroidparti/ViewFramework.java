@@ -19,16 +19,7 @@ import java.util.List;
 
 
 public class ViewFramework extends ActionBarActivity {
-
-    /*private final int NUM_QUESTIONS = 2;
-    private final int NUM_CHOICES = 4;*/
-
-    private String description;
     private List<Topic> topics;
-    /*private String[] questions;
-    private String[] firstQuestionChoices;
-    private String[] secondQuestionChoices;
-    private int[] answers;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +35,6 @@ public class ViewFramework extends ActionBarActivity {
 
         //Get the topic title array from QuizApp.
         String[] topicArray = app.getTopicArray();
-
-        //Set the current topic.
-        for (int i = 0; i < topicArray.length; i++) {
-            if (topicSelected.equalsIgnoreCase(topicArray[i]))
-                app.setCurrentTopic(topics.get(i));
-        }
 
         // Set up a new fragment manager.
         FragmentManager fm = getFragmentManager();

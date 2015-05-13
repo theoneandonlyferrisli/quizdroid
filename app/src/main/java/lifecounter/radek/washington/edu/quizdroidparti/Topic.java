@@ -18,6 +18,7 @@ public class Topic implements Serializable {
     private List<Question> questions;
     private int numCorrect;
     private int currentIndex;
+    private int lastSelected;
 
     //Construct a topic object with no questions.
     public Topic(String title, String shortDesc, String longDesc) {
@@ -53,6 +54,13 @@ public class Topic implements Serializable {
     }
 
     /**
+     * Returns true if quiz on the current topic is finished and false otherwise.
+     */
+    public boolean isFinished() {
+        return currentIndex == questions.size() - 1;
+    }
+
+    /**
      * Getters for all instance variables.
      */
 
@@ -79,4 +87,8 @@ public class Topic implements Serializable {
     public int getCurrentIndex() {
         return currentIndex;
     }
+
+    public int getLastSelected() { return lastSelected; }
+
+    public void setLastSelected(int lastSelected) { this.lastSelected = lastSelected; }
 }

@@ -13,12 +13,12 @@ import android.widget.TextView;
 
 public class AnswerFragment extends Fragment {
 
-    private Bundle qna;
+    /*private Bundle qna;
     private int current;
     private int numCorrect;
     private int correctAnswer;
     private int selected;
-    private int total;
+    private int total;*/
 
 
     public AnswerFragment() {
@@ -28,46 +28,38 @@ public class AnswerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            qna = getArguments();
-
-            numCorrect = qna.getInt("correct");
-            current = qna.getInt("current");
-            correctAnswer = qna.getInt("correctAnswer") + 1;
-            selected = qna.getInt("selected") + 1;
-            total = qna.getInt("numQ");
-
-            if (correctAnswer == selected)
-                numCorrect++;
-
-            qna.putInt("current", current + 1);
-            qna.putInt("correct", numCorrect);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Get the application object and all the info needed.
+        QuizApp app = (QuizApp) getActivity().getApplication();
+        final Topic currentTopic = app.getCurrentTopic();
+        Question currentQuestion = currentTopic.getQuestions().get(currentTopic.getCurrentIndex());
+        currentTopic.choose(currentTopic.getLastSelected());
+
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_answer, container, false);
         TextView result1 = (TextView) view.findViewById(R.id.correct_answer);
-        result1.setText("The correct choice is the no." + correctAnswer +
-                ", and you answered no." + selected);
+        result1.setText("The correct choice is the no." + currentQuestion.getAnswer() +
+                ", and you answered no." + currentTopic.getLastSelected());
 
         TextView result2 = (TextView) view.findViewById(R.id.num_correct);
-        result2.setText("You have " + numCorrect + " out of " + total + " correct!");
+        result2.setText("You have " + currentTopic.getNumCorrect() + " out of "
+                + currentTopic.getQuestions().size() + " correct!");
 
         Button next = (Button) view.findViewById(R.id.next);
-        if (current == 1)
+        if (currentTopic.isFinished())
             next.setText("FINISH");
 
         final QuestionFragment questionFragment = new QuestionFragment();
-        questionFragment.setArguments(qna);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (current  < 1) {
+                if (!currentTopic.isFinished()) {
                     getFragmentManager().beginTransaction()
                         .replace(R.id.container, questionFragment)
                         .commit();

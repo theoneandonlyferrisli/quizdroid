@@ -25,7 +25,7 @@ public class TopicList extends ActionBarActivity {
         setContentView(R.layout.activity_topic_list);
 
         // Access the application object
-        QuizApp app = (QuizApp)getApplication();
+        final QuizApp app = (QuizApp)getApplication();
 
         topicList = (ListView) findViewById(R.id.list_of_topics);
         topics = app.getLocalTopicList();
@@ -40,7 +40,7 @@ public class TopicList extends ActionBarActivity {
         // Set up the adapter for the ListView containing a list of topics for
         // users to choose from.
         ArrayAdapter<String> topicListAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_2, topicArray);
+                android.R.layout.simple_list_item_1, topicArray);
         topicList.setAdapter(topicListAdapter);
 
         // Set up the OnItemClickListener so that the corresponding activity is brought
@@ -50,6 +50,8 @@ public class TopicList extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent next = new Intent(TopicList.this, ViewFramework.class);
                 next.putExtra("selectedTopic", topicArray[position]);
+                app.setCurrentTopic(topics.get(position));
+                app.getCurrentTopic().setLastSelected(position);
                 startActivity(next);
             }
         });

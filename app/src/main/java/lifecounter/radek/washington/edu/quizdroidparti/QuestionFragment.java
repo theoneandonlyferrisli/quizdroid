@@ -13,15 +13,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
 import java.util.zip.Inflater;
 
 
 public class QuestionFragment extends Fragment {
-    private Bundle qna;
-    private int current;
-    private String[] questions;
-    private int[] answers;
-    private String[] choices;
 
     public QuestionFragment() {
         // Required empty public constructor
@@ -30,21 +27,18 @@ public class QuestionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            qna = getArguments();
-            questions = qna.getStringArray("Q");
-            answers = qna.getIntArray("A");
-            current = qna.getInt("current");
-            if (current == 0)
-                choices = qna.getStringArray("Q1");
-            else
-                choices = qna.getStringArray("Q2");
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Get the application object and current topic.
+        QuizApp app = (QuizApp) getActivity().getApplication();
+        Topic current = app.getCurrentTopic();
+        List<Question> questions = current.getQuestions();
+        Question currentQuestion = questions.get(current.getCurrentIndex());
+        List<String> currentOptions = currentQuestion.getOptions();
+
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_question, container, false);
 
@@ -52,13 +46,13 @@ public class QuestionFragment extends Fragment {
         final Button submit = (Button) view.findViewById(R.id.submit);
         submit.setVisibility(View.INVISIBLE);
         TextView question = (TextView) view.findViewById(R.id.question);
-        question.setText(questions[current]);
+        question.setText(currentQuestion.getText());
 
         RadioGroup options = (RadioGroup)view.findViewById(R.id.choices);
 
-        for (int i = 0; i < qna.getInt("numC"); i++) {
-            String choice = choices[i];
-            ((RadioButton) options.getChildAt(i)).setText(choice);
+        for (int i = 0; i < currentOptions.size(); i++) {
+            String option = currentOptions.get(i);
+            ((RadioButton) options.getChildAt(i)).setText(currentOptions.get(i));
         }
 
         options.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -66,15 +60,11 @@ public class QuestionFragment extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton checked = (RadioButton) view.findViewById(checkedId);
                 int selected = Integer.parseInt((String) checked.getTag());
-                qna.putInt("selected", selected);
-                qna.putInt("correctAnswer", answers[current]);
-                qna.putInt("current", current);
                 submit.setVisibility(View.VISIBLE);
             }
         });
 
         final AnswerFragment answerFragment = new AnswerFragment();
-        answerFragment.setArguments(qna);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
