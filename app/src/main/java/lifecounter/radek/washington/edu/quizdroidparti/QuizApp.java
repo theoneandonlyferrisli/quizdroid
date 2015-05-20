@@ -1,9 +1,11 @@
 package lifecounter.radek.washington.edu.quizdroidparti;
 
 import android.app.Application;
+import android.app.DownloadManager;
 import android.util.Log;
 
 import java.util.List;
+import java.io.*;
 /**
  * Created by radek on 5/12/15.
  */
@@ -11,6 +13,9 @@ public class QuizApp extends Application {
     private static final String TAG = "QuizApp";
     private Topic current;
     private List<Topic> topics;
+
+    private DownloadManager downloadManager;
+    private long enqueue;
 
     // A repository of locally stored questions and topics.
     private LocalTopicRepo localRepo;
@@ -33,6 +38,27 @@ public class QuizApp extends Application {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "QuizApp is successfully created!");
+
+        File myFile = new File(getFilesDir().getAbsolutePath(), "/data.json");
+        String json = null;
+
+        if (myFile.exists()) {
+            try {
+                FileInputStream fis = openFileInput("data.json");
+                json = readJSONFile();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                InputStream inputStream = getAssets().open("data.json");
+                json = readJSONFile(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
