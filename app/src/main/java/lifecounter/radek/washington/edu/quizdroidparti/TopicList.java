@@ -179,4 +179,11 @@ public class TopicList extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DownloadService.startOrStopAlarm(this, false);
+        unregisterReceiver(receiver);
+    }
 }
