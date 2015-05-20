@@ -39,7 +39,7 @@ public class QuizApp extends Application {
         super.onCreate();
         Log.i(TAG, "QuizApp is successfully created!");
 
-        File myFile = new File(getFilesDir().getAbsolutePath(), "/data.json");
+        /*File myFile = new File(getFilesDir().getAbsolutePath(), "/data.json");
         String json = null;
 
         if (myFile.exists()) {
@@ -58,7 +58,7 @@ public class QuizApp extends Application {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     /**

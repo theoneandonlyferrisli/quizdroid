@@ -25,11 +25,9 @@ import java.util.List;
  */
 public class UserSettingActivity extends PreferenceActivity {
 
-    public static class GeneralPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.user_settings);
-        }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.user_settings);
     }
 }

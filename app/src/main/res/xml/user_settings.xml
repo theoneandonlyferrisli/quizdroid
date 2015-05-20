@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Settings">
+    <PreferenceCategory
+        android:title="Settings"
+        android:textSize = "15pt">
         <EditTextPreference
+            android:layout_weight = "1"
             android:title="URL from which the JSON file is to be downloaded"
             android:summary="Set your URL"
             android:key="prefUserURL" />
