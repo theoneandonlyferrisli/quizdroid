@@ -1,14 +1,22 @@
 package lifecounter.radek.washington.edu.quizdroidparti;
 
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.ParcelFileDescriptor;
+import android.preference.DialogPreference;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.telephony.CellSignalStrength;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +24,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,6 +38,7 @@ public class TopicList extends ActionBarActivity {
     private List<Topic> topics;
     private ListView topicList;
     private static final int SETTINGS_RESULT = 1;
+    private static final int OFF = 0;
 
 
     @Override
@@ -41,6 +51,15 @@ public class TopicList extends ActionBarActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE); // Add more filters here that you want the receiver to listen to
         registerReceiver(receiver, filter);
+
+        // Check the device's network connection.
+        if (!networkIsAvailable(this) || !hasSignal(this)) {
+            if (airplaneModeIsOn(this)) {
+                onHandlingairplaneModeOn(this);
+            } else {
+                Toast.makeText(this, "Not connected to network!", Toast.LENGTH_SHORT).show();
+            }
+        }
 
         // Access the application object
         final QuizApp app = (QuizApp)getApplication();
@@ -186,4 +205,58 @@ public class TopicList extends ActionBarActivity {
         DownloadService.startOrStopAlarm(this, false);
         unregisterReceiver(receiver);
     }
+
+    // Checks if there is network available.
+    private boolean networkIsAvailable(Context context) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    // Checks if the user is currently in airplane mode.
+    private boolean airplaneModeIsOn(Context context) {
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.System.AIRPLANE_MODE_ON, OFF) != OFF;
+    }
+
+    // Checks if the cell currently has signal.
+    private boolean hasSignal(Context context) {
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        return telephonyManager.getNetworkOperator() != null &&
+                telephonyManager.getNetworkOperatorName() != "";
+    }
+
+    /**
+     * Alerts the user if the device is in airplane mode and asks the user
+     * if they'd like to turn airplane mode off; takes the user to settings
+     * if they agree to do so, displays an error message otherwise.
+     */
+    private void onHandlingairplaneModeOn(final Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setMessage("Airplane mode is on. Would you like to turn it off?")
+                .setTitle("No Internet Connection");
+
+        builder.setPositiveButton("Turn if off", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+
+        alertDialog.show();
+    }
+
 }
