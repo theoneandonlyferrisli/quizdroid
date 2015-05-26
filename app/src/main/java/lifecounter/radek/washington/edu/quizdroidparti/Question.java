@@ -1,5 +1,6 @@
 package lifecounter.radek.washington.edu.quizdroidparti;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,5 +44,25 @@ public class Question {
 
     public List<String> getOptions() {
         return options;
+    }
+
+    public void setAnswer(int answer) {
+        this.answer = answer;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setOptions(List<String> options) {
+        this.options = options;
+    }
+
+    public void addOption(String option) {
+        if (options == null) {
+            options = new ArrayList<String>();
+        } else {
+            options.add(option);
+        }
     }
 }

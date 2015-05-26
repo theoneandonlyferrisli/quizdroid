@@ -26,9 +26,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -133,21 +135,16 @@ public class TopicList extends ActionBarActivity {
                                     FileInputStream fis = new FileInputStream(file.getFileDescriptor());
 
                                     // YOUR CODE HERE [convert file to String here]
-
-
-
-                                    // YOUR CODE HERE [write string to data/data.json]
-                                    //      [hint, i wrote a writeFile method in MyApp... figure out how to call that from inside this Activity]
-
-                                    // convert your json to a string and echo it out here to show that you did download it
-
-
-
-                                    /*
-                                    String jsonString = ....myjson...to string().... chipotle burritos.... blah
-                                    Log.i("MyApp - Here is the json we download:", jsonString);
-                                    */
-
+                                    BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+                                    StringBuilder out = new StringBuilder();
+                                    String line;
+                                    while ((line = reader.readLine()) != null) {
+                                        out.append(line);
+                                    }
+                                    String data = "";
+                                    data = out.toString();
+                                    QuizApp quizApp = (QuizApp) getApplication();
+                                    quizApp.writeToFile(data);
                                 } catch (FileNotFoundException e) {
                                     e.printStackTrace();
                                 } catch (IOException e) {
@@ -156,6 +153,30 @@ public class TopicList extends ActionBarActivity {
                                 break;
                             case DownloadManager.STATUS_FAILED:
                                 // YOUR CODE HERE! Your download has failed! Now what do you want it to do? Retry? Quit application? up to you!
+                                DownloadService.startOrStopAlarm(context, false);
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(TopicList.this);
+                                builder.setMessage("Do you want to retry or quitApp?");
+                                builder.setCancelable(true);
+
+                                builder.setPositiveButton("Retry",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                DownloadService.startOrStopAlarm(TopicList.this, true);
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                                builder.setNegativeButton("Quit",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                finish();
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                                AlertDialog alertDialog = builder.create();
+                                alertDialog.show();
                                 break;
                         }
                     }

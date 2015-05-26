@@ -26,6 +26,13 @@ public class Topic implements Serializable {
         questions = new ArrayList<Question>();
     }
 
+    //Construct an empty topic object.
+    public Topic() {
+        this(null, null, null, null);
+    }
+
+
+
     //Construct a topic object with the given short and long descriptions,
     //and list of questions.
     public Topic(String title, String shortDesc,
@@ -99,4 +106,20 @@ public class Topic implements Serializable {
     public int getLastSelected() { return lastSelected; }
 
     public void setLastSelected(int lastSelected) { this.lastSelected = lastSelected; }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setShortDesc(String shortDesc) {
+        this.shortDesc = shortDesc;
+    }
+
+    public void setLongDesc(String longDesc) {
+        this.longDesc = longDesc;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
 }
